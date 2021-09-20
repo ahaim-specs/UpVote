@@ -1,0 +1,25 @@
+// Setup Library
+plugins {
+    id 'library-conventions'
+    id 'license-manager'
+}
+
+// Set project information
+classifier.id = project.databaseVersion
+classifier.version = project.upvoteVersion
+
+project.evaluationDependsOn(':core')
+dependencies {
+    api project(':core')
+}
+
+// Set specific publication data
+publishing {
+    publications.create(archivesBaseName, MavenPublication) {
+        from components.java
+        pom {
+            name = project.projectName
+            description = "A simple crowdsourcing spec for voting systems and reputation for databases."
+        }
+    }
+}

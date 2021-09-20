@@ -1,0 +1,61 @@
+// Add plugins for libraries
+plugins {
+    id 'java-conventions'
+    id 'java-library'
+    id 'maven-publish'
+    id 'signing'
+}
+
+// Set global publication data
+publishing {
+    publications.withType(MavenPublication).all {
+        afterEvaluate {
+            artifactId = archivesBaseName
+        }
+        pom {
+            def baseUrl = "$project.userGithub/$project.projectBaseName"
+            url = "https://$baseUrl"
+            developers {
+                developer {
+                    name = project.userAuthor
+                    email = project.userEmail
+                    url = project.userWebsite
+                }
+            }
+            scm {
+                url = "https://$baseUrl"
+                connection = "scm:git:git://${baseUrl}.git"
+                developerConnection = "scm:git:ssh://git@${baseUrl}.git"
+            }
+            issueManagement {
+                system = 'Github Issues'
+                url = "https://$baseUrl/issues"
+            }
+            licenses {
+                license {
+                    name = project.licenseName
+                    url = project.licenseUrl
+                }
+            }
+        }
+        repositories {
+            maven {
+                name 'Builds'
+                url project.repo2Local
+            }
+            maven {
+                name 'Sonatype'
+                url 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+                credentials {
+                    username project.sonatypeUsername
+                    password project.sonatypePassword
+                }
+            }
+        }
+    }
+}
+
+// Sign all artifacts
+signing {
+    sign publishing.publications.withType(MavenPublication)
+}

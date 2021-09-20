@@ -5,8 +5,8 @@ plugins {
 }
 
 // Set project information
-classifier.id = project.databaseVersion
-classifier.version = project.upvoteVersion
+classifier.id = project.projectDatabase
+classifier.version = project.databaseVersion
 
 project.evaluationDependsOn(':core')
 dependencies {
@@ -18,7 +18,7 @@ publishing {
     publications.create(archivesBaseName, MavenPublication) {
         from components.java
         pom {
-            name = project.projectName
+            name = "${project.projectName} - ${project.projectDatabase.capitalize()}"
             description = "A simple crowdsourcing spec for voting systems and reputation for databases."
         }
     }
